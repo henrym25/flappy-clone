@@ -6,12 +6,23 @@ public class PlayerController : MonoBehaviour
 {
 
     public Rigidbody2D rigidBody;
+    public TextBehaviour textScript;
+    public bool playerDeath = false;
+
+    private void Start()
+    {
+        rigidBody.bodyType = RigidbodyType2D.Kinematic;
+    }
 
     // Update is called once per frame
     void Update()
     {
-        PlayerInput();
-        PlayerMovement();
+        if (textScript.gameStarted)
+        {
+            rigidBody.bodyType = RigidbodyType2D.Dynamic;
+            PlayerInput();
+            PlayerMovement();
+        }
 
     }
 
@@ -32,7 +43,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Danger")
         {
-            print(collision);
+            playerDeath = true;
             Destroy(rigidBody);
         }
     }
