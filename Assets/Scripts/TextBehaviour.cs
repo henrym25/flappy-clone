@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class TextBehaviour : MonoBehaviour
 {
-    public bool gameStarted = false;
-    public PlayerController deathHappened;
+    public PlayerController playerController;
+    public ButtonHandler buttonHandler;
+    public GameObject startButton;
+    public GameObject restartButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,20 +18,17 @@ public class TextBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameStarted)
+        if (buttonHandler.startGame)
         {
-            PlayerStatus(deathHappened.playerDeath);
+            PlayerStatus(playerController.playerDeath);
+        }
+
+        if (playerController.playerWin)
+        {
+            WinText();
         }
 
     }
-
-    public void OnStartClicked()
-    {
-        gameStarted = true;
-        GameObject startButton = GameObject.Find("Start Button");
-        startButton.SetActive(false);
-    }
-
 
     void PlayerStatus(bool playerDead)
     {
@@ -38,9 +37,18 @@ public class TextBehaviour : MonoBehaviour
         if (playerDead)
         {
             displayText.text = "You have died.";
+            restartButton.SetActive(true);
         } else
         {
             displayText.text = " ";
+            restartButton.SetActive(false);
         }
+    }
+
+    void WinText()
+    {
+        Text displayText = this.gameObject.GetComponent<Text>();
+        displayText.text = "You Won!! Click to start again";
+        restartButton.SetActive(true);
     }
 }

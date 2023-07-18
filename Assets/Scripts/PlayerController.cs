@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rigidBody;
     public TextBehaviour textScript;
     public bool playerDeath = false;
+    public bool playerWin = false;
+    public ButtonHandler buttonHandler;
 
     private void Start()
     {
@@ -17,11 +19,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (textScript.gameStarted)
-        {
+        if (buttonHandler.startGame) { 
             rigidBody.bodyType = RigidbodyType2D.Dynamic;
             PlayerInput();
             PlayerMovement();
+        }
+
+        if (playerWin)
+        {
+            rigidBody.bodyType = RigidbodyType2D.Kinematic;
         }
 
     }
@@ -30,7 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Mouse1))
         {
-            rigidBody.AddForce(Vector2.up * 50);
+            rigidBody.AddForce(Vector2.up * 20);
         }
     }
 
@@ -45,6 +51,9 @@ public class PlayerController : MonoBehaviour
         {
             playerDeath = true;
             Destroy(rigidBody);
+        } else if (collision.gameObject.tag == "Victory")
+        {
+            playerWin = true;
         }
     }
 }
